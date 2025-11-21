@@ -2,7 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
 import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
 
-// --- ⚠️ CRITICAL SECURITY RISK: DO NOT EXPOSE KEYS PUBLICLY ---
+// --- ⚠️ CRITICAL SECURITY RISK: DO NOT EXPOSE KEYS PUBLICLY --
 // Your API keys have been replaced with placeholders.
 // Exposing these in client-side code can lead to abuse and unexpected charges.
 // Store these securely on a backend server and have your website call your server.
