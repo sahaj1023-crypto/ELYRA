@@ -320,7 +320,7 @@ async function handleChatSubmit(inputValue) {
 }
 
 async function callGeminiApi(prompt, systemPrompt) {
-    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${GEMINI_API_KEY}`;
+    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
     const payload = {
         contents: [{ parts: [{ text: prompt }] }],
         systemInstruction: { parts: [{ text: systemPrompt }] }
