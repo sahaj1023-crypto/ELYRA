@@ -29,7 +29,12 @@ jobs:
           # Load the secret into an environment variable first
           # This method avoids issues with quotes in your API keys
           CONFIG_CONTENT: ${{ secrets.CONFIG_JS_CONTENT }}
-        run: echo "$CONFIG_CONTENT" > config.js
+        run: |
+          if [ -z "$CONFIG_CONTENT" ]; then
+            echo "::error::CONFIG_JS_CONTENT secret is missing or empty! Please add it in Settings > Secrets > Actions."
+            exit 1
+          fi
+          echo "$CONFIG_CONTENT" > config.js
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
