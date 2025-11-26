@@ -15,7 +15,7 @@ const firebaseConfig = {
     messagingSenderId: "692578664929",
     appId: "1:692578664929:web:ae56ba8691977795ea92a0"
 };
-const GEMINI_API_KEY = "AIzaSyCk41lcad7d659M5_zHkU-25FchQhD3P_s";
+const GEMINI_API_KEY = "AIzaSyCrfnnnmfQiXSwUwWYqyvoooMZjOHrS5HM";
 // --------------------------------------------------------------------
 
 // --- DOM Elements ---
