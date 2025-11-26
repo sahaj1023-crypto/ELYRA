@@ -29,7 +29,15 @@ jobs:
           # Load the secret into an environment variable first
           # This method avoids issues with quotes in your API keys
           CONFIG_CONTENT: ${{ secrets.CONFIG_JS_CONTENT }}
-        run: echo "$CONFIG_CONTENT" > config.js
+        run: |
+          echo "$CONFIG_CONTENT" > config.js
+          echo "Verifying config.js..."
+          ls -l config.js
+          if [ ! -s config.js ]; then
+            echo "Error: config.js is empty! Check your CONFIG_JS_CONTENT secret."
+            exit 1
+          fi
+
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
