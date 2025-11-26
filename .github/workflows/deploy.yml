@@ -27,7 +27,7 @@ jobs:
       - name: Create config.js
         env:
           # Load the secret into an environment variable first
-          # This prevents quote conflicts
+          # This method avoids issues with quotes in your API keys
           CONFIG_CONTENT: ${{ secrets.CONFIG_JS_CONTENT }}
         run: echo "$CONFIG_CONTENT" > config.js
 
