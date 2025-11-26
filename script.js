@@ -1,8 +1,21 @@
 // Import Firebase modules
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
 import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
-import { firebaseConfig, GEMINI_API_KEY } from "./config.js";
 
+// --- ⚠️ CRITICAL SECURITY RISK: DO NOT EXPOSE KEYS PUBLICLY  --
+// Your API keys have been replaced with placeholders.
+// Exposing these in client-side code can lead to abuse and unexpected charges.
+// Store these securely on a backend server and have your website call your server.
+const firebaseConfig = {
+    apiKey: "AIzaSyAiGkLA3M-YGARgmGieYcsgVsfdmF0sZUQ",
+    authDomain: "urja-power-monitor-2025.firebaseapp.com",
+    databaseURL: "https://urja-power-monitor-2025-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "urja-power-monitor-2025",
+    storageBucket: "urja-power-monitor-2025.firebasestorage.app",
+    messagingSenderId: "692578664929",
+    appId: "1:692578664929:web:ae56ba8691977795ea92a0"
+};
+const GEMINI_API_KEY = "AIzaSyCk41lcad7d659M5_zHkU-25FchQhD3P_s";
 // --------------------------------------------------------------------
 
 // --- DOM Elements ---
@@ -320,7 +333,7 @@ async function handleChatSubmit(inputValue) {
 }
 
 async function callGeminiApi(prompt, systemPrompt) {
-    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${GEMINI_API_KEY}`;
     const payload = {
         contents: [{ parts: [{ text: prompt }] }],
         systemInstruction: { parts: [{ text: systemPrompt }] }
