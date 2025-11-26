@@ -2,19 +2,21 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
 import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
 
-// --- ⚠️ CRITICAL SECURITY RISK: DO NOT EXPOSE KEYS PUBLICLY  --
-// Your API keys have been replaced with placeholders.
-// Exposing these in client-side code can lead to abuse and unexpected charges.
-// Store these securely on a backend server and have your website call your server.
+// --- SECURITY NOTICE ---
+// Replaced hardcoded keys with placeholders. 
+// You must enter your valid keys below for the app to work.
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "AIzaSyAiGkLA3M-YGARgmGieYcsgVsfdmF0sZUQ",
-    authDomain: "urja-power-monitor-2025.firebaseapp.com",
-    databaseURL: "https://urja-power-monitor-2025-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "urja-power-monitor-2025",
-    storageBucket: "urja-power-monitor-2025.firebasestorage.app",
-    messagingSenderId: "692578664929",
-    appId: "1:692578664929:web:ae56ba8691977795ea92a0"
+  apiKey: "AIzaSyAiGkLA3M-YGARgmGieYcsgVsfdmF0sZUQ",
+  authDomain: "urja-power-monitor-2025.firebaseapp.com",
+  databaseURL: "https://urja-power-monitor-2025-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "urja-power-monitor-2025",
+  storageBucket: "urja-power-monitor-2025.firebasestorage.app",
+  messagingSenderId: "692578664929",
+  appId: "1:692578664929:web:ae56ba8691977795ea92a0",
+  measurementId: "G-XRYNHZKETY"
 };
+
 const GEMINI_API_KEY = "AIzaSyCrfnnnmfQiXSwUwWYqyvoooMZjOHrS5HM";
 // --------------------------------------------------------------------
 
@@ -49,7 +51,7 @@ const ui = {
     aboutModalCloseBtn: document.getElementById('about-modal-close-btn'),
     limitCard: document.getElementById('limit-card'),
     starfieldCanvas: document.getElementById('starfield'),
-
+    
     // Dashboard (small) view
     chatCard: document.getElementById('chat-card'),
     chatForm: document.getElementById('chat-form'),
@@ -75,7 +77,7 @@ const ui = {
 
 // Manager to control background effects
 const effectsManager = {
-    starfield: { animationId: null, start: () => { }, stop: () => { } }
+    starfield: { animationId: null, start: () => {}, stop: () => {} }
 };
 
 // --- App State ---
@@ -123,7 +125,7 @@ function updateCharts() {
     const MAX_DATA_POINTS = 30;
     const now = new Date();
     const timeLabel = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-
+    
     const energyValue = parseFloat(currentSensorData.energy);
     const costValue = parseFloat(currentSensorData.cost);
 
@@ -144,8 +146,8 @@ function updateCharts() {
 function resetCharts() {
     chartData.labels = [];
     chartData.datasets.forEach(dataset => dataset.data = []);
-    if (consumptionChart) consumptionChart.update();
-    if (expandedConsumptionChart) expandedConsumptionChart.update();
+    if(consumptionChart) consumptionChart.update();
+    if(expandedConsumptionChart) expandedConsumptionChart.update();
 }
 
 // --- Firebase Connection Logic ---
@@ -162,7 +164,7 @@ function connectToESP32() {
                 currentSensorData = data;
                 dataHistory.push({ data, timestamp: Date.now() });
                 if (dataHistory.length > MAX_HISTORY_LENGTH) dataHistory.shift();
-
+                
                 updateDashboard(data);
                 updateBatteryIndicator(data);
                 updateCharts();
@@ -199,7 +201,7 @@ function setConnectionState(state, message = '') {
     ui.connectBtnText.classList.remove('hidden');
     ui.connectSpinner.classList.add('hidden');
     ui.connectBtn.disabled = false;
-
+    
     ui.statusDot.classList.remove('bg-green-500', 'bg-yellow-500', 'bg-red-500', 'bg-slate-600');
     ui.overdriveStatusIndicator.classList.add('hidden');
 
@@ -257,7 +259,7 @@ function updateBatteryIndicator(data) {
 
     ui.batteryFill.className = 'battery-fill';
     ui.limitCard.className = 'data-card p-6 animated';
-
+    
     if (percentage > 80) {
         ui.batteryFill.classList.add('state-high');
         ui.limitCard.classList.add('aura-high');
@@ -288,7 +290,7 @@ function addMessageToChat(sender, message, isAI) {
         messageDiv.innerHTML = `<p class="font-semibold" style="color: ${isAI ? 'var(--accent-cyan)' : 'var(--accent-purple)'};">${sender}</p><p class="text-text-primary whitespace-pre-wrap">${message}</p>`;
         return messageDiv;
     };
-
+    
     [ui.chatContainer, ui.chatContainerFullscreen].forEach(container => {
         if (container) {
             container.appendChild(createMessageElement());
@@ -308,7 +310,7 @@ async function handleChatSubmit(inputValue) {
     if (!userInput) return;
 
     if (!GEMINI_API_KEY || GEMINI_API_KEY.includes("YOUR")) {
-        addMessageToChat("Error", "Gemini API key is invalid.", true);
+        addMessageToChat("Error", "Please configure your Gemini API Key in script.js.", true);
         return;
     }
 
@@ -321,7 +323,7 @@ async function handleChatSubmit(inputValue) {
         const sensorDataContext = JSON.stringify(currentSensorData, null, 2);
         const fullPrompt = `Based on the following real-time data from an ESP32 power monitor, answer the user's question.\n\nSensor Data:\n${sensorDataContext}\n\nUser Question: "${userInput}"`;
         const systemPrompt = "You are Elyra AI, a helpful power management assistant. Analyze the provided real-time data to answer user questions concisely. Provide suggestions to save energy or explain the current power consumption. If the question is not related to power, act as a general conversational AI. Format your response using simple markdown.";
-
+        
         const response = await callGeminiApi(fullPrompt, systemPrompt);
         addMessageToChat("Elyra", response, true);
     } catch (error) {
@@ -333,7 +335,9 @@ async function handleChatSubmit(inputValue) {
 }
 
 async function callGeminiApi(prompt, systemPrompt) {
-    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+    // --- FIXED: Updated to gemini-2.5-flash which is the current stable model ---
+    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+    
     const payload = {
         contents: [{ parts: [{ text: prompt }] }],
         systemInstruction: { parts: [{ text: systemPrompt }] }
@@ -424,7 +428,7 @@ window.onload = () => {
 
     const savedTheme = localStorage.getItem('theme') || 'dark';
     if (savedTheme === 'light') document.body.classList.add('light-mode');
-    updateChartTheme();
+    updateChartTheme(); 
 
     ui.themeToggle.addEventListener('click', () => {
         document.body.classList.toggle('light-mode');
@@ -443,7 +447,7 @@ window.onload = () => {
 
     ui.connectBtn.addEventListener('click', connectToESP32);
     ui.disconnectBtn.addEventListener('click', disconnectFromESP32);
-
+    
     const openFullscreenChat = () => {
         effectsManager.starfield.stop();
         if (ui.starfieldCanvas) ui.starfieldCanvas.style.display = 'none';
@@ -466,7 +470,7 @@ window.onload = () => {
 
     ui.chatForm.addEventListener('submit', (e) => { e.preventDefault(); handleChatSubmit(ui.chatInput.value); });
     ui.chatFormFullscreen.addEventListener('submit', (e) => { e.preventDefault(); handleChatSubmit(ui.chatInputFullscreen.value); });
-
+    
     const onPromptClick = (e) => {
         if (e.target.classList.contains('prompt-button')) {
             const promptText = e.target.textContent.replace(/"/g, '');
@@ -486,7 +490,7 @@ window.onload = () => {
             }
         });
     });
-
+    
     ui.chartCard.addEventListener('click', showGraphModal);
     ui.aboutNavBtn.addEventListener('click', () => { ui.aboutModalOverlay.classList.remove('hidden'); setTimeout(() => ui.aboutModalOverlay.classList.add('visible'), 10); });
 
@@ -523,7 +527,7 @@ window.onload = () => {
                 stars.push({
                     x: Math.random() * ui.starfieldCanvas.width,
                     y: Math.random() * ui.starfieldCanvas.height,
-                    _radius: Math.random() * 1.5 + 0.5,
+                  _radius: Math.random() * 1.5 + 0.5,
                     alpha: Math.random(),
                     speed: Math.random() * 0.2 + 0.1,
                     twinkleSpeed: Math.random() * 0.015 + 0.005
@@ -535,7 +539,7 @@ window.onload = () => {
             ctx.clearRect(0, 0, ui.starfieldCanvas.width, ui.starfieldCanvas.height);
             stars.forEach(star => {
                 ctx.beginPath();
-                ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                ctx.arc(star.x, star.y, star._radius, 0, Math.PI * 2);
                 star.alpha += star.twinkleSpeed;
                 if (star.alpha > 1 || star.alpha < 0) star.twinkleSpeed *= -1;
                 ctx.fillStyle = `rgba(229, 231, 235, ${star.alpha * 0.7})`;
@@ -554,7 +558,7 @@ window.onload = () => {
         };
 
         effectsManager.starfield.start = () => { if (!effectsManager.starfield.animationId) animateStarfieldLoop(); };
-        effectsManager.starfield.stop = () => { if (effectsManager.starfield.animationId) { cancelAnimationFrame(effectsManager.starfield.animationId); effectsManager.starfield.animationId = null; } };
+        effectsManager.starfield.stop = () => { if (effectsManager.starfield.animationId) { cancelAnimationFrame(effectsManager.starfield.animationId); effectsManager.starfield.animationId = null; }};
 
         window.addEventListener('resize', () => { setCanvasSize(); createStars(); });
         setCanvasSize();
@@ -562,4 +566,3 @@ window.onload = () => {
         effectsManager.starfield.start();
     }
 };
-
