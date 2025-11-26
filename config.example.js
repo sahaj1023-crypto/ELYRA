@@ -1,6 +1,3 @@
-// --- CONFIGURATION TEMPLATE ---
-// Rename this file to config.js and enter your actual API keys.
-
 export const firebaseConfig = {
     apiKey: "YOUR_FIREBASE_API_KEY",
     authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
