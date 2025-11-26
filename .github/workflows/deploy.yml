@@ -25,7 +25,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Create config.js
-        run: echo "${{ secrets.CONFIG_JS_CONTENT }}" > config.js
+        env:
+          # Load the secret into an environment variable first
+          # This prevents quote conflicts
+          CONFIG_CONTENT: ${{ secrets.CONFIG_JS_CONTENT }}
+        run: echo "$CONFIG_CONTENT" > config.js
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
